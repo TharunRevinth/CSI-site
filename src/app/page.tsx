@@ -7,10 +7,6 @@ import MacDock from "@/components/MacDock";
 import CursorEyes from "@/components/CursorEyes";
 import Launchpad from "@/components/Launchpad";
 import LoadingScreen from "@/components/LoadingScreen";
-import dynamic from "next/dynamic";
-import AlbumCover from "https://framer.com/m/Album-Cover-8dFj.js@q4nvmo72PxbPXUavvzHZ";
-
-const GridScan = dynamic(() => import("@/components/GridScan").then((m) => m.GridScan), { ssr: false });
 
 type WindowId = "about" | "depts" | "events" | "projects" | "team" | "contact" | "csi";
 
@@ -87,29 +83,8 @@ export default function Desktop() {
     <main style={{ position: "relative", width: "100vw", height: "100vh", overflow: "hidden", background: "#050505" }}>
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
       
-      {/* Background Layer: Dynamic GridScan from React Bits */}
-      <div id="user-bg-image" style={{ position: "absolute", inset: 0, zIndex: 0 }}>
-        <GridScan
-          sensitivity={0.55}
-          lineThickness={1}
-          linesColor="#17171c"
-          gridScale={0.15}
-          scanColor="#3b82f6"
-          scanOpacity={0.25}
-          enablePost
-          bloomIntensity={0.4}
-          chromaticAberration={0.001}
-          noiseIntensity={0.01}
-        />
-      </div>
-
       {/* Eyes Layer that follows cursor */}
       <CursorEyes />
-
-      {/* Top Right Framer Album Cover */}
-      <div style={{ position: "absolute", top: 20, right: 20, zIndex: 10 }}>
-        <AlbumCover title="Crashing worlds" type="Album" year="2025" />
-      </div>
 
       {/* Window Manager Layer */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
