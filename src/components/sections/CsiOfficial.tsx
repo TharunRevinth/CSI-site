@@ -63,8 +63,14 @@ export function CsiOfficial() {
               { title: "Knowledge & Events", desc: "Hosting national level conferences, symposia, and publishing prestigious research journals." },
               { title: "Student Chapters", desc: "Nurturing tech talent in colleges through specialized workshops, contests, and mentorship." }
             ].map((val, i) => (
-              <motion.div key={i} variants={fadeUp} style={{ border: "1px solid rgba(240, 235, 225, 0.2)", padding: "30px" }}>
-                <h4 style={{ fontSize: "1.2rem", margin: "0 0 10px 0", fontWeight: 500 }}>{val.title}</h4>
+              <motion.div 
+                key={i} 
+                variants={fadeUp} 
+                whileHover={{ y: -6, backgroundColor: "rgba(255, 255, 255, 0.05)", borderColor: "rgba(255, 255, 255, 0.18)" }}
+                transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                style={{ border: "1px solid rgba(255, 255, 255, 0.06)", background: "rgba(255, 255, 255, 0.02)", backdropFilter: "blur(10px)", borderRadius: "20px", padding: "30px", cursor: "pointer" }}
+              >
+                <h4 style={{ fontSize: "1.2rem", margin: "0 0 10px 0", fontWeight: 600, color: "#3b82f6" }}>{val.title}</h4>
                 <p style={{ color: "rgba(240, 235, 225, 0.6)", fontSize: "0.95rem", lineHeight: 1.5, margin: 0 }}>{val.desc}</p>
               </motion.div>
             ))}

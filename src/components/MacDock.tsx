@@ -8,11 +8,12 @@ interface DockItemProps {
   label: string;
   iconSrc: string;
   bg?: string;
+  isOpen?: boolean;
   onClick: () => void;
   mouseX: any;
 }
 
-function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
+function DockItem({ label, iconSrc, bg, isOpen, onClick, mouseX }: DockItemProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -26,7 +27,7 @@ function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
 
   return (
     <div 
-      style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}
+      style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -41,6 +42,11 @@ function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
           <img src={iconSrc} alt={label} draggable={false} />
         </div>
       </motion.div>
+
+      {/* Active Dot */}
+      {isOpen && (
+        <div style={{ width: "4px", height: "4px", background: "white", borderRadius: "50%", marginTop: "4px", position: "absolute", bottom: "-8px" }} />
+      )}
 
       {/* Tooltip */}
       <div className={`dock-tooltip ${isHovered ? "visible" : ""}`}>
@@ -76,7 +82,7 @@ function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
         }
         .dock-tooltip {
           position: absolute;
-          top: -55px;
+          top: -65px;
           background: rgba(20, 20, 20, 0.7);
           color: rgba(255, 255, 255, 0.95);
           padding: 8px 16px;
@@ -102,14 +108,38 @@ function DockItem({ label, iconSrc, bg, onClick, mouseX }: DockItemProps) {
   );
 }
 
-export default function MacDock({ onOpen }: { onOpen: (id: string) => void }) {
+export default function MacDock({ 
+  onOpen, 
+  openApps, 
+  isChallengeUnlocked 
+}: { 
+  onOpen: (id: string) => void; 
+  openApps: string[]; 
+  isChallengeUnlocked?: boolean;
+}) {
   const mouseX = useMotionValue(Infinity);
 
-  const items: Array<{ id: string; label: string; iconSrc: string; bg?: string }> = [
-    { id: "about", label: "About", iconSrc: "/icons/Finder.png" },
-    { id: "depts", label: "Domains", iconSrc: "/icons/Domains.jpg" },
-    { id: "events", label: "Events", iconSrc: "/icons/Calendar.png" },
-    { id: "projects", label: "Projects", iconSrc: "/icons/Terminal.png" },
+  const pinnedItems: Array<{ id: string; label: string; iconSrc: string; bg?: string }> = [
+    { id: "about", label: "About Us", iconSrc: "/icons/Readme_New.png" },
+    { id: "projects", label: "Projects", iconSrc: "/icons/Projects_New.png" },
+    { id: "terminal", label: "Terminal", iconSrc: "/icons/Terminal_New.png" },
+    { id: "contact", label: "Contact", iconSrc: "/icons/Mail_New.png" },
+  ];
+
+  const dynamicItems: Array<{ id: string; label: string; iconSrc: string; bg?: string }> = [
+    { id: "depts", label: "Domains", iconSrc: "/icons/Domains_New.png" },
+    { id: "events", label: "Events", iconSrc: "/icons/Events_New.png" },
+    { id: "arcade", label: "Arcade Game", iconSrc: "/icons/Arcade_New.png" },
+    { id: "editor", label: "Code Editor", iconSrc: "/icons/Editor_New.png" },
+    { id: "team", label: "Team", iconSrc: "/icons/Team_New.png" },
+    { id: "neural", label: "Neural Hub", iconSrc: "/icons/Neural_New.png" },
+    { id: "csi", label: "CSI Official", iconSrc: "/icons/CSI.png" },
+    ...(isChallengeUnlocked ? [{ id: "ticket", label: "VIP Ticket", iconSrc: "/icons/Ticket_New.png" }] : []),
+  ];
+
+  const items = [
+    ...pinnedItems,
+    ...dynamicItems.filter(item => openApps.includes(item.id)),
     { id: "more", label: "Launchpad", iconSrc: "/icons/launchpad.png" },
   ];
 
@@ -143,6 +173,7 @@ export default function MacDock({ onOpen }: { onOpen: (id: string) => void }) {
           iconSrc={item.iconSrc} 
           label={item.label} 
           bg={item.bg}
+          isOpen={openApps.includes(item.id)}
           onClick={() => onOpen(item.id)} 
           mouseX={mouseX} 
         />

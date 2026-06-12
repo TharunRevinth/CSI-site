@@ -14,7 +14,7 @@ export function Events() {
   ];
 
   return (
-    <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", background: "#0a0a0a", padding: "16px", boxSizing: "border-box" }}>
+    <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", background: "transparent", padding: "16px", boxSizing: "border-box" }}>
       <div style={{ 
         display: "grid", 
         gridTemplateColumns: "1.2fr 2fr 1fr 1fr", 

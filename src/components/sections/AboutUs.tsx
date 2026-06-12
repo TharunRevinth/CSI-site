@@ -48,17 +48,33 @@ export function AboutUs() {
               <h2 style={{ fontSize: "2rem", fontFamily: "var(--font-anton), sans-serif", margin: 0, letterSpacing: "1px" }}>CORE VALUES</h2>
               <p style={{ color: "rgba(240, 235, 225, 0.5)", fontSize: "1rem", marginTop: "10px" }}>The principles that guide our work.</p>
             </motion.div>
-            <div style={{ marginBottom: "80px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "20px", marginBottom: "80px" }}>
               {[
                 { num: "01", title: "Craft over credentials", desc: "What you build matters more than your GPA." },
                 { num: "02", title: "Open by default", desc: "Knowledge shared is knowledge multiplied." },
                 { num: "03", title: "Ship early, learn fast", desc: "Progress over perfection, always." }
               ].map((val, i) => (
-                <motion.div key={i} variants={fadeUp} style={{ borderBottom: i !== 2 ? "1px solid rgba(240, 235, 225, 0.2)" : "none", padding: "30px 0", display: "flex", gap: "30px", alignItems: "flex-start" }}>
-                  <span style={{ fontSize: "1.2rem", fontWeight: 500, color: "rgba(240, 235, 225, 0.4)", fontFamily: "var(--font-anton), sans-serif", marginTop: "2px" }}>{val.num}</span>
+                <motion.div 
+                  key={i} 
+                  variants={fadeUp}
+                  whileHover={{ x: 10, backgroundColor: "rgba(255, 255, 255, 0.04)", borderColor: "rgba(255, 255, 255, 0.15)" }}
+                  transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                  style={{ 
+                    padding: "24px", 
+                    display: "flex", 
+                    gap: "24px", 
+                    alignItems: "flex-start",
+                    background: "rgba(255, 255, 255, 0.01)",
+                    backdropFilter: "blur(10px)",
+                    border: "1px solid rgba(255, 255, 255, 0.05)",
+                    borderRadius: "16px",
+                    cursor: "pointer"
+                  }}
+                >
+                  <span style={{ fontSize: "1.5rem", fontWeight: 700, color: "#3b82f6", fontFamily: "var(--font-anton), sans-serif", marginTop: "-2px" }}>{val.num}</span>
                   <div>
-                    <h4 style={{ fontSize: "1.4rem", margin: "0 0 8px 0", fontWeight: 400, letterSpacing: "-0.01em" }}>{val.title}</h4>
-                    <p style={{ fontSize: "1rem", lineHeight: 1.5, margin: 0, color: "rgba(240, 235, 225, 0.6)" }}>{val.desc}</p>
+                    <h4 style={{ fontSize: "1.25rem", margin: "0 0 6px 0", fontWeight: 600, letterSpacing: "-0.01em", color: "#F0EBE1" }}>{val.title}</h4>
+                    <p style={{ fontSize: "0.95rem", lineHeight: 1.5, margin: 0, color: "rgba(240, 235, 225, 0.6)" }}>{val.desc}</p>
                   </div>
                 </motion.div>
               ))}
@@ -68,21 +84,36 @@ export function AboutUs() {
       case "Statistics":
         return (
           <motion.div initial="hidden" animate="visible" variants={stagger} key="stats">
-            <motion.div variants={fadeUp} style={{ marginBottom: "60px" }}>
+            <motion.div variants={fadeUp} style={{ marginBottom: "40px" }}>
               <h2 style={{ fontSize: "2rem", fontFamily: "var(--font-anton), sans-serif", margin: 0, letterSpacing: "1px" }}>BY THE NUMBERS</h2>
               <p style={{ color: "rgba(240, 235, 225, 0.5)", fontSize: "1rem", marginTop: "10px" }}>A snapshot of our community impact.</p>
             </motion.div>
-            <motion.div variants={fadeUp} style={{ display: "flex", justifyItems: "center", flexWrap: "wrap", gap: "40px", paddingTop: "20px" }}>
+            <motion.div variants={fadeUp} style={{ display: "flex", justifyItems: "center", flexWrap: "wrap", gap: "20px", paddingTop: "20px" }}>
               {[
                 { num: "150+", lbl: "Members" },
                 { num: "40+", lbl: "Events" },
                 { num: "25+", lbl: "Projects" },
                 { num: "6", lbl: "Years Strong" }
               ].map((stat, i) => (
-                <div key={i} style={{ flex: "1 1 150px" }}>
-                  <div style={{ fontFamily: "var(--font-anton), sans-serif", fontSize: "5rem", lineHeight: 1 }}>{stat.num}</div>
-                  <div style={{ fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "2px", marginTop: "15px", color: "rgba(240, 235, 225, 0.5)" }}>{stat.lbl}</div>
-                </div>
+                <motion.div 
+                  key={i} 
+                  whileHover={{ y: -8, scale: 1.02, borderColor: "rgba(255,255,255,0.2)", backgroundColor: "rgba(255,255,255,0.05)" }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  style={{ 
+                    flex: "1 1 200px", 
+                    padding: "30px", 
+                    background: "rgba(255, 255, 255, 0.02)", 
+                    backdropFilter: "blur(12px)", 
+                    border: "1px solid rgba(255, 255, 255, 0.06)", 
+                    borderRadius: "20px", 
+                    textAlign: "center",
+                    boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+                    cursor: "pointer"
+                  }}
+                >
+                  <div style={{ fontFamily: "var(--font-anton), sans-serif", fontSize: "4.5rem", lineHeight: 1, color: "#fff", textShadow: "0 4px 20px rgba(255,255,255,0.1)" }}>{stat.num}</div>
+                  <div style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "2px", marginTop: "15px", color: "rgba(240, 235, 225, 0.5)" }}>{stat.lbl}</div>
+                </motion.div>
               ))}
             </motion.div>
           </motion.div>
@@ -93,35 +124,44 @@ export function AboutUs() {
   };
 
   return (
-    <div style={{ display: "flex", width: "100%", height: "100%", background: "#0a0a0a", color: "#F0EBE1", fontFamily: "var(--font-inter), sans-serif", overflow: "hidden" }}>
+    <div style={{ display: "flex", width: "100%", height: "100%", background: "transparent", color: "#F0EBE1", fontFamily: "var(--font-inter), sans-serif", overflow: "hidden" }}>
       
       {/* Finder Sidebar */}
-      <div style={{ width: "220px", background: "rgba(255, 255, 255, 0.02)", borderRight: "1px solid rgba(255, 255, 255, 0.05)", display: "flex", flexDirection: "column", padding: "20px 10px", flexShrink: 0 }}>
+      <div style={{ width: "220px", background: "rgba(255, 255, 255, 0.01)", borderRight: "1px solid rgba(255, 255, 255, 0.05)", display: "flex", flexDirection: "column", padding: "20px 10px", flexShrink: 0 }}>
         <div style={{ fontSize: "0.7rem", color: "rgba(240, 235, 225, 0.4)", fontWeight: 600, padding: "0 10px", marginBottom: "10px", textTransform: "uppercase", letterSpacing: "1px" }}>Favorites</div>
         
-        <div 
+        <motion.div 
           onClick={() => setActiveTab("About Us")}
-          style={{ padding: "6px 10px", borderRadius: "6px", background: activeTab === "About Us" ? "rgba(255, 255, 255, 0.1)" : "transparent", color: activeTab === "About Us" ? "#F0EBE1" : "rgba(240, 235, 225, 0.6)", fontSize: "0.85rem", marginBottom: "4px", display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", transition: "background 0.2s" }}
+          whileHover={{ scale: 1.02, x: 4, backgroundColor: "rgba(255, 255, 255, 0.08)" }}
+          whileTap={{ scale: 0.98 }}
+          transition={{ type: "spring", stiffness: 450, damping: 25 }}
+          style={{ padding: "8px 12px", borderRadius: "8px", background: activeTab === "About Us" ? "rgba(255, 255, 255, 0.1)" : "transparent", color: activeTab === "About Us" ? "#F0EBE1" : "rgba(240, 235, 225, 0.6)", fontSize: "0.85rem", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
           About Us
-        </div>
+        </motion.div>
         
-        <div 
+        <motion.div 
           onClick={() => setActiveTab("Core Values")}
-          style={{ padding: "6px 10px", borderRadius: "6px", background: activeTab === "Core Values" ? "rgba(255, 255, 255, 0.1)" : "transparent", color: activeTab === "Core Values" ? "#F0EBE1" : "rgba(240, 235, 225, 0.6)", fontSize: "0.85rem", marginBottom: "4px", display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", transition: "background 0.2s" }}
+          whileHover={{ scale: 1.02, x: 4, backgroundColor: "rgba(255, 255, 255, 0.08)" }}
+          whileTap={{ scale: 0.98 }}
+          transition={{ type: "spring", stiffness: 450, damping: 25 }}
+          style={{ padding: "8px 12px", borderRadius: "8px", background: activeTab === "Core Values" ? "rgba(255, 255, 255, 0.1)" : "transparent", color: activeTab === "Core Values" ? "#F0EBE1" : "rgba(240, 235, 225, 0.6)", fontSize: "0.85rem", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
           Core Values
-        </div>
+        </motion.div>
         
-        <div 
+        <motion.div 
           onClick={() => setActiveTab("Statistics")}
-          style={{ padding: "6px 10px", borderRadius: "6px", background: activeTab === "Statistics" ? "rgba(255, 255, 255, 0.1)" : "transparent", color: activeTab === "Statistics" ? "#F0EBE1" : "rgba(240, 235, 225, 0.6)", fontSize: "0.85rem", marginBottom: "4px", display: "flex", alignItems: "center", gap: "8px", cursor: "pointer", transition: "background 0.2s" }}
+          whileHover={{ scale: 1.02, x: 4, backgroundColor: "rgba(255, 255, 255, 0.08)" }}
+          whileTap={{ scale: 0.98 }}
+          transition={{ type: "spring", stiffness: 450, damping: 25 }}
+          style={{ padding: "8px 12px", borderRadius: "8px", background: activeTab === "Statistics" ? "rgba(255, 255, 255, 0.1)" : "transparent", color: activeTab === "Statistics" ? "#F0EBE1" : "rgba(240, 235, 225, 0.6)", fontSize: "0.85rem", marginBottom: "6px", display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
           Statistics
-        </div>
+        </motion.div>
       </div>
 
       {/* Main Finder Area */}

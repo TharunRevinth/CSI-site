@@ -45,7 +45,7 @@ export function Team() {
   const loopedMembers = Array(20).fill(members).flat();
 
   return (
-    <div style={{ width: "100%", height: "100%", background: "#0a0a0a", display: "flex", flexDirection: "column" }}>
+    <div style={{ width: "100%", height: "100%", background: "transparent", display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1, width: "100%", position: "relative", overflow: "hidden" }}>
         <ElevatedCarousel 
           items={loopedMembers}

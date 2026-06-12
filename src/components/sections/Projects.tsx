@@ -29,7 +29,7 @@ export function Projects() {
   ];
 
   return (
-    <div style={{ padding: "40px 8%", width: "100%", height: "100%", position: "relative", overflow: "hidden", display: "flex", justifyContent: "space-between", alignItems: "center", background: "#050505" }}>
+    <div style={{ padding: "40px 8%", width: "100%", height: "100%", position: "relative", overflow: "hidden", display: "flex", justifyContent: "space-between", alignItems: "center", background: "transparent" }}>
       <div style={{ flex: 1, maxWidth: "500px", paddingRight: "40px", display: "flex", flexDirection: "column" }}>
         
         {/* Terminal Header */}
