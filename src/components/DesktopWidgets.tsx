@@ -39,7 +39,7 @@ export default function DesktopWidgets() {
     <div 
       style={{
         position: "absolute",
-        top: "80px",
+        top: "30px",
         left: "40px",
         display: "flex",
         flexDirection: "column",

@@ -69,7 +69,7 @@ import Launchpad from "@/components/Launchpad";
 import LoadingScreen from "@/components/LoadingScreen";
 import Menubar from "@/components/Menubar";
 import ContextMenu from "@/components/ContextMenu";
-import NeuralNetwork from "@/components/NeuralNetwork";
+import Wallpaper, { WallpaperType } from "@/components/Wallpaper";
 import CursorGlow from "@/components/CursorGlow";
 import ActionCenter from "@/components/ActionCenter";
 import DesktopWidgets from "@/components/DesktopWidgets";
@@ -87,6 +87,7 @@ export default function Desktop() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isChallengeUnlocked, setIsChallengeUnlocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [wallpaper, setWallpaper] = useState<WallpaperType>("neural");
 
   // Spotlight Search keyboard listener (Cmd/Ctrl + K)
   useEffect(() => {
@@ -242,17 +243,16 @@ export default function Desktop() {
     >
       {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
       
-      <Menubar 
-        activeApp={activeWindow ? getWindowTitle(activeWindow) : "Finder"} 
-        onControlCenterToggle={() => setIsActionCenterOpen(!isActionCenterOpen)}
-        onSearchToggle={() => setIsSearchOpen(!isSearchOpen)}
+      <ActionCenter 
+        isOpen={isActionCenterOpen} 
+        onClose={() => setIsActionCenterOpen(false)} 
+        currentWallpaper={wallpaper}
+        onWallpaperChange={setWallpaper}
       />
-
-      <ActionCenter isOpen={isActionCenterOpen} onClose={() => setIsActionCenterOpen(false)} />
 
       {/* Interactive Background Layers with Parallax */}
       <motion.div style={{ x: moveX, y: moveY, position: "absolute", inset: "-50px", zIndex: 0 }}>
-        <NeuralNetwork />
+        <Wallpaper type={wallpaper} />
       </motion.div>
       <CursorGlow />
       <DesktopWidgets />
@@ -261,7 +261,7 @@ export default function Desktop() {
       <div 
         style={{ 
           position: "absolute", 
-          top: "60px", 
+          top: "30px", 
           right: "20px", 
           display: "flex", 
           flexDirection: "column", 
@@ -305,7 +305,7 @@ export default function Desktop() {
       </div>
 
       {/* Window Manager Layer */}
-      <div style={{ position: "absolute", top: "48px", bottom: 0, left: 0, right: 0, pointerEvents: "none" }}>
+      <div style={{ position: "absolute", top: 0, bottom: 0, left: 0, right: 0, pointerEvents: "none" }}>
         <AnimatePresence>
           {openWindows.map((id) => (
             <DesktopWindow
@@ -351,7 +351,7 @@ export default function Desktop() {
             items={[
               { label: "New Folder", onClick: () => console.log("New Folder") },
               { label: "Get Info", onClick: () => toggleWindow("about") },
-              { label: "Change Wallpaper...", onClick: () => console.log("Wallpaper"), separator: true },
+              { label: "Change Wallpaper...", onClick: () => setIsActionCenterOpen(true), separator: true },
               { label: "Use Stacks", onClick: () => console.log("Stacks") },
               { label: "Sort By", onClick: () => console.log("Sort") },
               { label: "Clean Up By", onClick: () => console.log("Clean Up"), separator: true },

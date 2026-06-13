@@ -25,24 +25,24 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Cycle through languages faster for snappier load feel
+    // Cycle through languages at a readable pace
     const helloInterval = setInterval(() => {
       setHelloIndex((prev) => {
         if (prev >= HELLOS.length - 1) return prev; // Stay on last one before exit
         return prev + 1;
       });
-    }, 150);
+    }, 350);
 
-    // Progress bar increments faster
+    // Progress bar increments smoothly to match the 3.2s duration
     const progressInterval = setInterval(() => {
-      setProgress((prev) => Math.min(100, prev + 2));
-    }, 20);
+      setProgress((prev) => Math.min(100, prev + 1));
+    }, 32);
 
-    // End sequence after 1.5s
+    // End sequence after 3.2s
     const timeout = setTimeout(() => {
       setIsFinishing(true);
       setTimeout(onComplete, 600);
-    }, 1500);
+    }, 3200);
 
     return () => {
       clearInterval(helloInterval);

@@ -12,6 +12,7 @@ interface Node {
   name: string;
   role: string;
   image: string;
+  dept: string;
   radius: number;
   baseRadius: number;
   targetRadius: number;
@@ -19,23 +20,56 @@ interface Node {
 }
 
 const MEMBERS = [
-  { name: "Arjun Selvam", role: "President", image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=100&auto=format&fit=crop" },
-  { name: "Karthik Rajan", role: "Vice President", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=100&auto=format&fit=crop" },
-  { name: "Meera Krishnan", role: "Design Lead", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100&auto=format&fit=crop" },
-  { name: "Vikram Anand", role: "Security Lead", image: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=100&auto=format&fit=crop" },
-  { name: "Priya Nair", role: "Tech Lead", image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=100&auto=format&fit=crop" },
-  { name: "Rahul Verma", role: "Event Manager", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=100&auto=format&fit=crop" },
-  { name: "Sneha Kapoor", role: "Marketing Lead", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=100&auto=format&fit=crop" },
-  { name: "Ishaan Singh", role: "Outreach Lead", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=100&auto=format&fit=crop" },
-  { name: "Ananya Iyer", role: "Content Head", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&auto=format&fit=crop" },
-  { name: "Dev Patel", role: "Fullstack Dev", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop" },
+  { name: "Arjun Selvam", role: "President", image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=100&auto=format&fit=crop", dept: "Executive Core" },
+  { name: "Karthik Rajan", role: "Vice President", image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=100&auto=format&fit=crop", dept: "Executive Core" },
+  { name: "Meera Krishnan", role: "Design Lead", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100&auto=format&fit=crop", dept: "Design & Content" },
+  { name: "Vikram Anand", role: "Security Lead", image: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=100&auto=format&fit=crop", dept: "Executive Core" },
+  { name: "Priya Nair", role: "Tech Lead", image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=100&auto=format&fit=crop", dept: "Technical" },
+  { name: "Rahul Verma", role: "Event Manager", image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=100&auto=format&fit=crop", dept: "Management & Marketing" },
+  { name: "Sneha Kapoor", role: "Marketing Lead", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=100&auto=format&fit=crop", dept: "Management & Marketing" },
+  { name: "Ishaan Singh", role: "Outreach Lead", image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=100&auto=format&fit=crop", dept: "Management & Marketing" },
+  { name: "Ananya Iyer", role: "Content Head", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&auto=format&fit=crop", dept: "Design & Content" },
+  { name: "Dev Patel", role: "Fullstack Dev", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop", dept: "Technical" },
 ];
+
+const getDeptColor = (dept: string, alpha: number = 1) => {
+  switch (dept) {
+    case "Executive Core":
+      return `rgba(245, 158, 11, ${alpha})`; // Amber Gold
+    case "Technical":
+      return `rgba(59, 130, 246, ${alpha})`; // Electric Blue
+    case "Design & Content":
+      return `rgba(236, 72, 153, ${alpha})`; // Hot Pink
+    case "Management & Marketing":
+      return `rgba(16, 185, 129, ${alpha})`; // Emerald Green
+    default:
+      return `rgba(255, 255, 255, ${alpha})`;
+  }
+};
+
+const getDeptCenter = (dept: string, w: number, h: number) => {
+  const contentHeight = h - 140;
+  switch (dept) {
+    case "Executive Core":
+      return { x: w * 0.5, y: 140 + contentHeight * 0.25 };
+    case "Technical":
+      return { x: w * 0.22, y: 140 + contentHeight * 0.65 };
+    case "Design & Content":
+      return { x: w * 0.78, y: 140 + contentHeight * 0.65 };
+    case "Management & Marketing":
+      return { x: w * 0.5, y: 140 + contentHeight * 0.75 };
+    default:
+      return { x: w * 0.5, y: 140 + contentHeight * 0.5 };
+  }
+};
 
 export function NeuralHub() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [selectedMember, setSelectedMember] = useState<typeof MEMBERS[0] | null>(null);
   const nodes = useRef<Node[]>([]);
-  const mouse = useRef({ x: 0, y: 0, active: false });
+  const mouse = useRef({ x: 0, y: 0, active: false, down: false });
+  const draggedNodeIdRef = useRef<number | null>(null);
+  const dragStartRef = useRef<{ x: number; y: number; time: number }>({ x: 0, y: 0, time: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -44,19 +78,24 @@ export function NeuralHub() {
     if (!ctx) return;
 
     const initNodes = (w: number, h: number) => {
-      nodes.current = Array.from({ length: 35 }).map((_, i) => {
-        const baseRadius = Math.random() * 15 + 20; // radius 20 to 35
+      // Create a node for each member
+      nodes.current = MEMBERS.map((member, i) => {
+        const baseRadius = 24 + Math.random() * 6; // node radii: 24 to 30
         const img = new Image();
-        img.src = MEMBERS[i % MEMBERS.length].image;
+        img.src = member.image;
+        const center = getDeptCenter(member.dept, w, h);
+        
+        // Spawn slightly randomized around their department centers
         return {
           id: i,
-          x: Math.random() * w,
-          y: 120 + Math.random() * Math.max(100, h - 120 - baseRadius * 2),
-          vx: (Math.random() - 0.5) * 1.2,
-          vy: (Math.random() - 0.5) * 1.2,
-          name: MEMBERS[i % MEMBERS.length].name,
-          role: MEMBERS[i % MEMBERS.length].role,
-          image: MEMBERS[i % MEMBERS.length].image,
+          x: center.x + (Math.random() - 0.5) * 80,
+          y: center.y + (Math.random() - 0.5) * 80,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          name: member.name,
+          role: member.role,
+          image: member.image,
+          dept: member.dept,
           radius: baseRadius,
           baseRadius,
           targetRadius: baseRadius,
@@ -77,6 +116,11 @@ export function NeuralHub() {
       
       if (nodes.current.length === 0) {
         initNodes(w, h);
+      } else {
+        nodes.current.forEach((node) => {
+          node.x = Math.max(node.radius, Math.min(w - node.radius, node.x));
+          node.y = Math.max(140 + node.radius, Math.min(h - node.radius, node.y));
+        });
       }
     };
 
@@ -89,38 +133,97 @@ export function NeuralHub() {
       
       const nodesArr = nodes.current;
       
-      // Default cursor
-      canvas.style.cursor = "crosshair";
+      // Draw background department labels
+      const depts = [
+        { label: "EXECUTIVE CORE", x: canvas.width * 0.5, y: 140 + (canvas.height - 140) * 0.22, color: "rgba(245, 158, 11, 0.08)" },
+        { label: "TECHNICAL DOMAIN", x: canvas.width * 0.22, y: 140 + (canvas.height - 140) * 0.62, color: "rgba(59, 130, 246, 0.08)" },
+        { label: "DESIGN & CONTENT", x: canvas.width * 0.78, y: 140 + (canvas.height - 140) * 0.62, color: "rgba(236, 72, 153, 0.08)" },
+        { label: "MANAGEMENT & MARKETING", x: canvas.width * 0.5, y: 140 + (canvas.height - 140) * 0.79, color: "rgba(16, 185, 129, 0.08)" }
+      ];
       
-      // Update & Draw Connections with Neon Blue Glow on hover
+      depts.forEach(d => {
+        ctx.fillStyle = d.color;
+        ctx.font = "800 24px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(d.label, d.x, d.y);
+      });
+
+      // Default cursor
+      if (draggedNodeIdRef.current !== null) {
+        canvas.style.cursor = "grabbing";
+      } else {
+        canvas.style.cursor = "crosshair";
+      }
+      
+      // Resolve overlapping node collisions (push away)
       for (let i = 0; i < nodesArr.length; i++) {
         for (let j = i + 1; j < nodesArr.length; j++) {
           const dx = nodesArr[i].x - nodesArr[j].x;
           const dy = nodesArr[i].y - nodesArr[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 160) {
+          const minDist = nodesArr[i].radius + nodesArr[j].radius + 15; // spacing margin
+          
+          if (dist < minDist) {
+            const overlap = minDist - dist;
+            const nx = dx / (dist || 1);
+            const ny = dy / (dist || 1);
+            const pushX = nx * overlap * 0.5;
+            const pushY = ny * overlap * 0.5;
+
+            if (draggedNodeIdRef.current === nodesArr[i].id) {
+              nodesArr[j].x -= pushX * 2;
+              nodesArr[j].y -= pushY * 2;
+            } else if (draggedNodeIdRef.current === nodesArr[j].id) {
+              nodesArr[i].x += pushX * 2;
+              nodesArr[i].y += pushY * 2;
+            } else {
+              nodesArr[i].x += pushX;
+              nodesArr[i].y += pushY;
+              nodesArr[j].x -= pushX;
+              nodesArr[j].y -= pushY;
+              
+              // Mild bounce energy
+              nodesArr[i].vx += pushX * 0.04;
+              nodesArr[i].vy += pushY * 0.04;
+              nodesArr[j].vx -= pushX * 0.04;
+              nodesArr[j].vy -= pushY * 0.04;
+            }
+          }
+        }
+      }
+
+      // Draw connections (highlighted within departments)
+      for (let i = 0; i < nodesArr.length; i++) {
+        for (let j = i + 1; j < nodesArr.length; j++) {
+          const dx = nodesArr[i].x - nodesArr[j].x;
+          const dy = nodesArr[i].y - nodesArr[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          // Connect nodes if they are within 180px
+          if (dist < 180) {
             ctx.beginPath();
             ctx.moveTo(nodesArr[i].x, nodesArr[i].y);
             ctx.lineTo(nodesArr[j].x, nodesArr[j].y);
             
-            let opacity = (1 - dist / 160) * 0.12;
+            const isSameDept = nodesArr[i].dept === nodesArr[j].dept;
+            let opacity = (1 - dist / 180) * (isSameDept ? 0.16 : 0.05);
             
-            // Highlight connections close to mouse/hovered nodes
             if (mouse.current.active) {
               const mx = mouse.current.x;
               const my = mouse.current.y;
               const d1 = Math.sqrt((nodesArr[i].x - mx) ** 2 + (nodesArr[i].y - my) ** 2);
               const d2 = Math.sqrt((nodesArr[j].x - mx) ** 2 + (nodesArr[j].y - my) ** 2);
-              if (d1 < 120 || d2 < 120) {
-                opacity = (1 - dist / 160) * 0.25;
-                ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`;
+              
+              if (d1 < 100 || d2 < 100) {
+                opacity = (1 - dist / 180) * (isSameDept ? 0.35 : 0.15);
+                ctx.strokeStyle = getDeptColor(nodesArr[i].dept, opacity);
               } else {
-                ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+                ctx.strokeStyle = isSameDept ? getDeptColor(nodesArr[i].dept, opacity) : `rgba(255, 255, 255, ${opacity})`;
               }
             } else {
-              ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+              ctx.strokeStyle = isSameDept ? getDeptColor(nodesArr[i].dept, opacity) : `rgba(255, 255, 255, ${opacity})`;
             }
-            ctx.lineWidth = 0.8;
+            ctx.lineWidth = isSameDept ? 1.0 : 0.6;
             ctx.stroke();
           }
         }
@@ -128,53 +231,59 @@ export function NeuralHub() {
 
       // Update & Draw Nodes
       nodesArr.forEach((node) => {
-        // Move
-        node.x += node.vx;
-        node.y += node.vy;
-
-        // Bounce from boundaries
-        if (node.x - node.radius < 0 || node.x + node.radius > canvas.width) node.vx *= -1;
-        if (node.y - node.radius < 120 || node.y + node.radius > canvas.height) node.vy *= -1;
-
-        // Keep inside boundaries
-        node.x = Math.max(node.radius, Math.min(canvas.width - node.radius, node.x));
-        node.y = Math.max(120 + node.radius, Math.min(canvas.height - node.radius, node.y));
-
-        // Hover detection
         const dxMouse = node.x - mouse.current.x;
         const dyMouse = node.y - mouse.current.y;
         const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
-        
-        let isHovered = false;
-        if (mouse.current.active && distMouse < node.radius + 10) {
-          isHovered = true;
-          canvas.style.cursor = "pointer";
+        const isHovered = mouse.current.active && distMouse < node.radius + 10;
+
+        if (isHovered && draggedNodeIdRef.current === null) {
+          canvas.style.cursor = "grab";
         }
 
-        // Mouse interaction (Gentle magnetic attraction and dampening for easy clicking)
-        if (mouse.current.active && distMouse < 160) {
-          const force = (160 - distMouse) / 160;
-          if (isHovered) {
-            // Almost stop the node when hovered so it's super easy to click
-            node.vx *= 0.5;
-            node.vy *= 0.5;
-          } else {
-            // Magnetically pull the node gently towards the cursor
-            node.vx -= dxMouse * force * 0.003;
-            node.vy -= dyMouse * force * 0.003;
-            // Dampen its velocity so it remains steady near the cursor
-            node.vx *= 0.90;
-            node.vy *= 0.90;
+        if (draggedNodeIdRef.current === node.id) {
+          // Follow cursor directly
+          const dx = mouse.current.x - node.x;
+          const dy = mouse.current.y - node.y;
+          node.vx = dx * 0.25;
+          node.vy = dy * 0.25;
+          node.x += node.vx;
+          node.y += node.vy;
+        } else {
+          // Physics updates
+          node.x += node.vx;
+          node.y += node.vy;
+
+          // Department Gravity Pull (keeps them clustered by domain)
+          const center = getDeptCenter(node.dept, canvas.width, canvas.height);
+          const dxCenter = center.x - node.x;
+          const dyCenter = center.y - node.y;
+          node.vx += dxCenter * 0.0007; // gentle gravity coefficient
+          node.vy += dyCenter * 0.0007;
+
+          // Boundaries bounce
+          if (node.x - node.radius < 0 || node.x + node.radius > canvas.width) {
+            node.vx *= -1;
+            node.x = Math.max(node.radius, Math.min(canvas.width - node.radius, node.x));
           }
+          if (node.y - node.radius < 140 || node.y + node.radius > canvas.height) {
+            node.vy *= -1;
+            node.y = Math.max(140 + node.radius, Math.min(canvas.height - node.radius, node.y));
+          }
+
+          // Slow down node gently when hovered
+          if (isHovered) {
+            node.vx *= 0.6;
+            node.vy *= 0.6;
+          }
+
+          // Friction and ambient drifting
+          node.vx *= 0.95;
+          node.vy *= 0.95;
+          node.vx += (Math.random() - 0.5) * 0.03;
+          node.vy += (Math.random() - 0.5) * 0.03;
         }
 
-        // Friction and soft natural movement
-        node.vx *= 0.97;
-        node.vy *= 0.97;
-        node.vx += (Math.random() - 0.5) * 0.05;
-        node.vy += (Math.random() - 0.5) * 0.05;
-
-        // Animate radius size
+        // Animate radius scaling on hover
         node.targetRadius = isHovered ? node.baseRadius * 1.35 : node.baseRadius;
         node.radius += (node.targetRadius - node.radius) * 0.15;
 
@@ -193,7 +302,6 @@ export function NeuralHub() {
             node.radius * 2
           );
         } else {
-          // Fallback background gradient
           const grad = ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.radius);
           grad.addColorStop(0, "rgba(59, 130, 246, 0.4)");
           grad.addColorStop(1, "rgba(29, 78, 216, 0.1)");
@@ -202,25 +310,25 @@ export function NeuralHub() {
         }
         ctx.restore();
 
-        // Draw profile ring outline
+        // Draw outer ring (colored according to department)
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        if (isHovered) {
-          ctx.strokeStyle = "rgba(59, 130, 246, 0.95)";
+        if (isHovered || draggedNodeIdRef.current === node.id) {
+          ctx.strokeStyle = getDeptColor(node.dept, 1);
           ctx.lineWidth = 3;
-          ctx.shadowBlur = 12;
-          ctx.shadowColor = "#3b82f6";
+          ctx.shadowBlur = 15;
+          ctx.shadowColor = getDeptColor(node.dept, 0.8);
         } else {
-          ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+          ctx.strokeStyle = getDeptColor(node.dept, 0.5);
           ctx.lineWidth = 1.5;
           ctx.shadowBlur = 0;
         }
         ctx.stroke();
         ctx.shadowBlur = 0;
 
-        // Label rendering
+        // Draw label
         if (isHovered || node.radius > 25) {
-          ctx.fillStyle = isHovered ? "#3b82f6" : "rgba(255, 255, 255, 0.75)";
+          ctx.fillStyle = isHovered ? getDeptColor(node.dept, 1) : "rgba(255, 255, 255, 0.75)";
           ctx.font = isHovered ? "bold 11px Inter" : "500 10px Inter";
           ctx.textAlign = "center";
           ctx.fillText(node.name.split(" ")[0], node.x, node.y + node.radius + 15);
@@ -244,45 +352,91 @@ export function NeuralHub() {
     };
   }, []);
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = canvasRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    mouse.current = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-      active: true
-    };
-  };
-
-  const handleClick = (e: React.MouseEvent) => {
+  const handleMouseDown = (e: React.MouseEvent) => {
     const rect = canvasRef.current?.getBoundingClientRect();
     if (!rect) return;
     const mx = e.clientX - rect.left;
     const my = e.clientY - rect.top;
 
-    const clickedNode = nodes.current.find(n => {
+    mouse.current.down = true;
+
+    // Identify if a node was clicked
+    const clickedNode = nodes.current.find((n) => {
       const dx = n.x - mx;
       const dy = n.y - my;
       return Math.sqrt(dx * dx + dy * dy) < n.radius + 10;
     });
 
     if (clickedNode) {
-      setSelectedMember(MEMBERS.find(m => m.name === clickedNode.name) || null);
+      draggedNodeIdRef.current = clickedNode.id;
+      dragStartRef.current = {
+        x: mx,
+        y: my,
+        time: Date.now()
+      };
     }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    mouse.current = {
+      x: mx,
+      y: my,
+      active: true,
+      down: mouse.current.down
+    };
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    mouse.current.down = false;
+
+    if (draggedNodeIdRef.current !== null) {
+      const start = dragStartRef.current;
+      const dx = mx - start.x;
+      const dy = my - start.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const duration = Date.now() - start.time;
+
+      // Quick select triggers if mouse barely moved
+      if (dist < 8 && duration < 300) {
+        const clickedNode = nodes.current.find(n => n.id === draggedNodeIdRef.current);
+        if (clickedNode) {
+          setSelectedMember(MEMBERS.find(m => m.name === clickedNode.name) || null);
+        }
+      }
+      
+      draggedNodeIdRef.current = null;
+    }
+  };
+
+  const handleMouseLeave = () => {
+    mouse.current.active = false;
+    mouse.current.down = false;
+    draggedNodeIdRef.current = null;
   };
 
   return (
     <div 
-      style={{ width: "100%", height: "100%", position: "relative", background: "#101012", overflow: "hidden", cursor: "crosshair" }}
+      style={{ width: "100%", height: "100%", position: "relative", background: "#101012", overflow: "hidden" }}
+      onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => mouse.current.active = false}
-      onClick={handleClick}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
     >
       <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }} />
 
       <div style={{ position: "absolute", top: "20px", left: "20px", pointerEvents: "none" }}>
         <h2 style={{ fontSize: "2rem", fontWeight: 800, color: "white", textTransform: "uppercase", letterSpacing: "2px", opacity: 0.8 }}>Interactive Neural Hub</h2>
-        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.9rem" }}>Click a node to view member details • Move mouse to interact</p>
+        <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.9rem" }}>Nodes are grouped by department • Drag nodes to reposition/throw them • Click a node to inspect details</p>
       </div>
 
       <AnimatePresence>
@@ -291,12 +445,13 @@ export function NeuralHub() {
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
+            onClick={(e) => e.stopPropagation()}
             style={{
               position: "absolute",
               bottom: "40px",
               left: "50%",
               transform: "translateX(-50%)",
-              width: "300px",
+              width: "320px",
               background: "rgba(30, 30, 30, 0.8)",
               backdropFilter: "blur(20px)",
               padding: "20px",
@@ -311,13 +466,22 @@ export function NeuralHub() {
           >
             <button 
               onClick={() => setSelectedMember(null)}
-              style={{ position: "absolute", top: "10px", right: "15px", background: "none", border: "none", color: "white", opacity: 0.5, cursor: "pointer" }}
+              style={{ position: "absolute", top: "10px", right: "15px", background: "none", border: "none", color: "white", opacity: 0.5, cursor: "pointer", fontSize: "16px" }}
             >×</button>
-            <div style={{ width: "80px", height: "80px", borderRadius: "50%", overflow: "hidden", marginBottom: "15px", border: "2px solid rgba(255,255,255,0.2)" }}>
+            <div style={{ 
+              width: "80px", 
+              height: "80px", 
+              borderRadius: "50%", 
+              overflow: "hidden", 
+              marginBottom: "15px", 
+              border: `3px solid ${getDeptColor(selectedMember.dept, 0.8)}`,
+              boxShadow: `0 0 10px ${getDeptColor(selectedMember.dept, 0.4)}`
+            }}>
               <img src={selectedMember.image} alt={selectedMember.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             </div>
             <h3 style={{ fontSize: "1.2rem", fontWeight: 700, margin: "0 0 5px 0" }}>{selectedMember.name}</h3>
-            <p style={{ fontSize: "0.9rem", color: "#3b82f6", fontWeight: 600, margin: 0 }}>{selectedMember.role}</p>
+            <p style={{ fontSize: "0.9rem", color: getDeptColor(selectedMember.dept, 1), fontWeight: 700, margin: "0 0 4px 0" }}>{selectedMember.dept}</p>
+            <p style={{ fontSize: "0.8rem", color: "rgba(255,255,255,0.5)", fontWeight: 500, margin: 0 }}>{selectedMember.role}</p>
             <motion.button 
               whileHover={{ scale: 1.05, backgroundColor: "#f3f4f6" }}
               whileTap={{ scale: 0.95 }}
