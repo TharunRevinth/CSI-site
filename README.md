@@ -5,8 +5,9 @@ An interactive, desktop-inspired web application for CSI. Built with [Next.js](h
 ## Features
 
 - **macOS Desktop Interface**: A premium operating system shell featuring a fully functional magnifying dock, action centers, and desktop shortcuts. (Top menubar removed for a clean full-screen look).
-- **Dynamic Wallpaper Engine**: Switch between four premium animated live wallpapers directly from the Action Center drawer:
-  * **Neural Network (Default)**: Interactive canvas particles tracking mouse movements.
+- **Dynamic Wallpaper Engine**: Switch between five premium animated live wallpapers directly from the Action Center drawer:
+  * **VIT Chennai 3D Hologram (Default)**: Interactive Three.js WebGL rendering of campus landmarks (Netaji Dome, MG Block, obelisk roundabout) with pulsing network nodes.
+  * **Neural Network**: Interactive canvas particles tracking mouse movements.
   * **Cyber Grid**: Retro-cyberpunk grid lines with a vertical sweeping neon-cyan laser.
   * **Aurora Flow**: Shifting fluid purple/blue organic gradients.
   * **Charcoal Matte**: A clean, professional dark slate with micro-dot arrays.

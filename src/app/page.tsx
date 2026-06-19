@@ -78,6 +78,8 @@ import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from
 
 type WindowId = "about" | "depts" | "events" | "projects" | "team" | "contact" | "csi" | "neural" | "terminal" | "arcade" | "editor" | "ticket";
 
+
+
 export default function Desktop() {
   const [openWindows, setOpenWindows] = useState<WindowId[]>([]);
   const [minimizedWindows, setMinimizedWindows] = useState<WindowId[]>([]);
@@ -87,7 +89,7 @@ export default function Desktop() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isChallengeUnlocked, setIsChallengeUnlocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [wallpaper, setWallpaper] = useState<WallpaperType>("neural");
+  const [wallpaper, setWallpaper] = useState<WallpaperType>("hologram");
 
   // Spotlight Search keyboard listener (Cmd/Ctrl + K)
   useEffect(() => {
@@ -234,6 +236,8 @@ export default function Desktop() {
     { id: "editor", label: "Code Editor", iconSrc: "/icons/Editor_Doodle.svg" },
     ...(isChallengeUnlocked ? [{ id: "ticket", label: "VIP Ticket", iconSrc: "/icons/Ticket_Doodle.svg" }] : [])
   ];
+
+
 
   return (
     <main 

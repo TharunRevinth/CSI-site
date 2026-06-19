@@ -25,6 +25,7 @@ const SEARCH_ITEMS: SearchItem[] = [
   { id: "arcade", name: "Arcade Game", category: "Applications", description: "Play retro neon matrix Snake game." },
 
   // Members
+
   { id: "team", name: "Arjun Selvam", category: "Members", description: "President • Web Dev" },
   { id: "team", name: "Karthik Rajan", category: "Members", description: "Vice President • AI/ML" },
   { id: "team", name: "Meera Krishnan", category: "Members", description: "Design Lead • UI/UX" },
